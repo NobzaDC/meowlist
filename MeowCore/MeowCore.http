@@ -1,0 +1,6 @@
+@MeowCore_HostAddress = http://localhost:5027
+
+GET {{MeowCore_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
