@@ -1,4 +1,7 @@
 
+using MeowCore.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace MeowCore
 {
     public class Program
@@ -6,6 +9,11 @@ namespace MeowCore
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Configure Database
+
+            builder.Services.AddDbContext<MeowDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("PawnectionString")));
 
             // Add services to the container.
 
@@ -16,12 +24,8 @@ namespace MeowCore
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
 

@@ -32,3 +32,11 @@ appsettings.Development.json
 *.snupkg
 
 # Ignore launchSettings.json if you want to keep local settings private
+Properties/launchSettings.json
+
+# Entity Framework Migrations build artifacts
+Migrations/*.Designer.cs
+Migrations/*ModelSnapshot.cs
+
+# Ignore http files used for API testing
+*.http
