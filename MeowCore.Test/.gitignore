@@ -1,0 +1,44 @@
+# Ignore build output
+bin/
+obj/
+
+# Ignore test coverage files
+*.coverage
+*.coveragexml
+*.testresults
+TestResults/
+*.trx
+
+# Ignore user-specific files
+*.user
+*.suo
+
+# Ignore VS Code workspace settings
+.vscode/
+
+# Ignore temporary files
+*.tmp
+*.log
+
+# Ignore debug files
+*.pdb
+
+# Ignore generated files
+*.dll
+*.exe
+
+# Ignore NuGet packages
+*.nupkg
+.nuget/
+project.assets.json
+
+# Ignore static web assets
+*.staticwebassets.*
+
+# Ignore coverage mapping
+*.msCoverageSourceRootsMapping_*
+CoverletSourceRootsMapping_*
+
+# Ignore other IDE files
+*.DS_Store
+*.idea/

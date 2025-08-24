@@ -6,6 +6,104 @@ Purrfect lists for imperfect humans.
 
 MeowList is a simple .NET 8 Web API for managing todo lists, tags, and users. It uses Entity Framework Core for data access and supports migrations for database versioning.
 
+## Project Structure
+
+### Data Folder (`MeowCore/Data`)
+
+Contains repository classes and interfaces for data access.  
+Repositories handle CRUD operations and queries for each model (Users, Lists, Todos, Tags).
+
+- **Repositories:**  
+  - `UsersRepository.cs`
+  - `ListsRepository.cs`
+  - `TodosRepository.cs`
+  - `TagsRepository.cs`
+- **Interfaces:**  
+  - `Interfaces/IUsersRepository.cs`
+  - `Interfaces/IListsRepository.cs`
+  - `Interfaces/ITodosRepository.cs`
+  - `Interfaces/ITagsRepository.cs`
+
+**Usage:**  
+Repositories are injected into services and provide direct access to the database using Entity Framework Core.
+
+### Service Folder (`MeowCore/Service`)
+
+Contains service classes and interfaces for business logic.  
+Services validate input, apply business rules, and call repository methods.
+
+- **Services:**  
+  - `UsersService.cs`
+  - `ListsService.cs`
+  - `TodosService.cs`
+  - `TagsService.cs`
+- **Interfaces:**  
+  - `Interfaces/IUsersService.cs`
+  - `Interfaces/IListsService.cs`
+  - `Interfaces/ITodosService.cs`
+  - `Interfaces/ITagsService.cs`
+
+**Usage:**  
+Services are injected into controllers and act as the main layer for application logic, ensuring data integrity and validation before accessing repositories.
+
+---
+
+## Unit Tests (`MeowCore.Test`)
+
+The `MeowCore.Test` project contains **unit tests** for controllers, services, repositories, and helpers using **xUnit** and **Moq**.
+
+### Structure
+
+- **Controllers/**  
+  Tests for each API controller, validating endpoint responses and error handling.
+- **Service/**  
+  Tests for business logic in service classes, using mocked repositories.
+- **Data/**  
+  Tests for repository methods, using an in-memory database for isolation.
+- **Helpers/**  
+  Tests for utility classes like `ApiResponse` and `JwtService`.
+
+### How Tests Work
+
+- **Controllers:**  
+  Mock dependencies (services, loggers, etc.) and verify correct HTTP responses for each endpoint.
+- **Services:**  
+  Mock repositories and validate business logic, including edge cases and error scenarios.
+- **Repositories:**  
+  Use `Microsoft.EntityFrameworkCore.InMemory` to simulate a database, seed mock data, and verify CRUD operations.
+- **Helpers:**  
+  Test static methods and token generation logic.
+
+### Running Tests
+
+To run all tests:
+
+```powershell
+dotnet test MeowCore.Test
+```
+
+### Example Test
+
+```csharp
+[Fact]
+public async Task GetUsersAsync_ReturnsOk()
+{
+    var result = await _controller.GetUsersAsync();
+    var okResult = Assert.IsType<OkObjectResult>(result);
+    var response = Assert.IsType<ApiResponse<List<Users>>>(okResult.Value);
+    Assert.True(response.IsSuccess);
+}
+```
+
+### Test Coverage
+
+- **Controllers:** All endpoints for Users, Lists, Tags, Todos, Health.
+- **Services:** All main business logic methods.
+- **Repositories:** All CRUD and query methods.
+- **Helpers:** ApiResponse and JwtService.
+
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -85,4 +183,99 @@ The API will be available at `https://localhost:5001` (or as configured).
 
 ---
 
-For more details, see the source code in the `MeowCore/Models` folder and the migration files in `MeowCore/Migrations
+## LogHelper Documentation
+
+The `LogHelper` class (located in `Helpers/LogHelper.cs`) provides a generic logging utility for API requests and responses.
+
+### Features
+
+- Tracks request and response data, status codes, endpoint info, and exceptions.
+- Supports audit logging in JSON format using the built-in logger.
+
+### Usage
+
+**Create an initial log:**
+```csharp
+var log = LogHelper<RequestType, ResponseType>.GetInitialLog(
+    controllerName,
+    endpointName,
+    endpointParams,
+    requestObject
+);
+```
+
+**Update log with response:**
+```csharp
+log = LogHelper<RequestType, ResponseType>.GetUpdatedLog(log, responseObject, statusCode);
+```
+
+**Log an error:**
+```csharp
+log = LogHelper<RequestType, ResponseType>.GetErrorLog(
+    log,
+    statusCode,
+    exception.Message,
+    exception.InnerException?.Message ?? "",
+    exception.StackTrace ?? ""
+);
+```
+
+**Audit log (writes to ILogger):**
+```csharp
+LogHelper<RequestType, ResponseType>.Audit(logger, log);
+```
+
+### Properties
+
+- `id`: Unique identifier for the log entry.
+- `controller`: Controller name.
+- `endpoint`: Endpoint name.
+- `endPointParams`: List of endpoint parameters.
+- `statusCode`: HTTP status code.
+- `request`: Request object.
+- `response`: Response object.
+- `exceptionMessage`, `exceptionInnerException`, `exceptionStackTrace`: Exception details.
+
+---
+
+## Logging (Serilog)
+
+MeowList utiliza **Serilog** para el registro estructurado de logs.
+
+### ¿Cómo funciona el logger?
+
+- El logger está configurado en `Program.cs` usando Serilog.
+- Los logs se escriben en:
+  - Un archivo local (por defecto en `C:\whiskerWatch\Logs\Index.txt`)
+  - La consola de depuración
+
+**Ejemplo de configuración en `Program.cs`:**
+```csharp
+builder.Host.UseSerilog((hostContext, services, configuration) => {
+    configuration
+        .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+        .Enrich.FromLogContext()
+        .WriteTo.Debug(outputTemplate: DateTime.Now.ToString())
+        .WriteTo.File(builder.Configuration.GetSection("AppSettings")["LogPathFile"] ?? defaultLogPathFile, rollingInterval: RollingInterval.Day);
+});
+```
+
+### Configuración personalizada
+
+Puedes cambiar la ruta del archivo de logs en `appsettings.json`:
+
+```json
+"AppSettings": {
+  "LogPathFile": "C:\\whiskerWatch\\Logs\\Index.txt"
+}
+```
+
+---
+
+**Resumen:**  
+- Los logs se envían a archivo y a la consola.
+- Puedes revisar los logs en el archivo configurado o en la salida de depuración.
+
+---
+
+For more details, see the source code in the `MeowCore/Models` folder, the migration files in `MeowCore/Migrations`, and the `Helpers/LogHelper.cs` file.
