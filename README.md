@@ -240,16 +240,16 @@ LogHelper<RequestType, ResponseType>.Audit(logger, log);
 
 ## Logging (Serilog)
 
-MeowList utiliza **Serilog** para el registro estructurado de logs.
+MeowList uses **Serilog** for structured logging.
 
-### ¿Cómo funciona el logger?
+### How does the logger work?
 
-- El logger está configurado en `Program.cs` usando Serilog.
-- Los logs se escriben en:
-  - Un archivo local (por defecto en `C:\whiskerWatch\Logs\Index.txt`)
-  - La consola de depuración
+- The logger is configured in `Program.cs` using Serilog.
+- Logs are written to:
+  - A local file (default: `C:\whiskerWatch\Logs\Index.txt`)
+  - The debug console
 
-**Ejemplo de configuración en `Program.cs`:**
+**Example configuration in `Program.cs`:**
 ```csharp
 builder.Host.UseSerilog((hostContext, services, configuration) => {
     configuration
@@ -260,9 +260,9 @@ builder.Host.UseSerilog((hostContext, services, configuration) => {
 });
 ```
 
-### Configuración personalizada
+### Custom configuration
 
-Puedes cambiar la ruta del archivo de logs en `appsettings.json`:
+You can change the log file path in `appsettings.json`:
 
 ```json
 "AppSettings": {
@@ -272,9 +272,9 @@ Puedes cambiar la ruta del archivo de logs en `appsettings.json`:
 
 ---
 
-**Resumen:**  
-- Los logs se envían a archivo y a la consola.
-- Puedes revisar los logs en el archivo configurado o en la salida de depuración.
+**Summary:**  
+- Logs are sent to a file and to the debug console.
+- You can review logs in the configured file or in the debug output.
 
 ---
 
