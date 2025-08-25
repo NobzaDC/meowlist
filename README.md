@@ -109,7 +109,7 @@ public async Task GetUsersAsync_ReturnsOk()
 ### Prerequisites
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
-- SQL Server (or compatible database)
+- SQL Server 
 
 ### Setup
 

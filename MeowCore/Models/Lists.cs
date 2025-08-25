@@ -17,7 +17,7 @@ namespace MeowCore.Models
         public int UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]
-        public Lists User { get; set; } = null!;
+        public Users User { get; set; } = null!;
 
         // Relaciones
         public ICollection<Todos> Todos { get; set; } = new List<Todos>();
