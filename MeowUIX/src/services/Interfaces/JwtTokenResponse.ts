@@ -2,6 +2,12 @@
  * DTO for JWT token response.
  */
 export interface JwtTokenResponse {
+
+
+  /**
+   * Id of the user doing the request
+   */
+  user_id: string;
   /**
    * JWT access token string.
    */

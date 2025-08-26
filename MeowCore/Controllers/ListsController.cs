@@ -3,6 +3,7 @@ using MeowCore.Models;
 using MeowCore.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MeowCore.Models.RequestDTOs;
 
 namespace MeowCore.Controllers
 {
@@ -14,7 +15,7 @@ namespace MeowCore.Controllers
         private readonly ILogger<ListsController> _logger;
         private readonly LogHelper<object, ApiResponse<List<Lists>>> _logHelperList;
         private readonly LogHelper<int, ApiResponse<Lists>> _logHelperGet;
-        private readonly LogHelper<Lists, ApiResponse<Lists>> _logHelperListObj;
+        private readonly LogHelper<ListRequestDto, ApiResponse<Lists>> _logHelperListObj;
         private readonly LogHelper<int, ApiResponse<bool>> _logHelperBool;
 
         public ListsController(IListsService service, ILogger<ListsController> logger)
@@ -25,7 +26,7 @@ namespace MeowCore.Controllers
             _logHelperList.CreateLogger(_logger);
             _logHelperGet = new LogHelper<int, ApiResponse<Lists>>();
             _logHelperGet.CreateLogger(_logger);
-            _logHelperListObj = new LogHelper<Lists, ApiResponse<Lists>>();
+            _logHelperListObj = new LogHelper<ListRequestDto, ApiResponse<Lists>>();
             _logHelperListObj.CreateLogger(_logger);
             _logHelperBool = new LogHelper<int, ApiResponse<bool>>();
             _logHelperBool.CreateLogger(_logger);
@@ -88,7 +89,7 @@ namespace MeowCore.Controllers
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<Lists>), 201)]
         [ProducesResponseType(typeof(ApiResponse<Lists>), 400)]
-        public async Task<IActionResult> CreateListAsync([FromBody] Lists list)
+        public async Task<IActionResult> CreateListAsync([FromBody] ListRequestDto list)
         {
             var log = _logHelperListObj.GetInitialLog(
                 nameof(ListsController),
@@ -119,7 +120,7 @@ namespace MeowCore.Controllers
         [ProducesResponseType(typeof(ApiResponse<Lists>), 200)]
         [ProducesResponseType(typeof(ApiResponse<Lists>), 400)]
         [ProducesResponseType(typeof(ApiResponse<Lists>), 404)]
-        public async Task<IActionResult> UpdateListAsync(int id, [FromBody] Lists list)
+        public async Task<IActionResult> UpdateListAsync(int id, [FromBody] ListRequestDto list)
         {
             var log = _logHelperListObj.GetInitialLog(
                 nameof(ListsController),

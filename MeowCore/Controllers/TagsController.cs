@@ -3,6 +3,7 @@ using MeowCore.Models;
 using MeowCore.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MeowCore.Models.RequestDTOs;
 
 namespace MeowCore.Controllers
 {
@@ -14,7 +15,7 @@ namespace MeowCore.Controllers
         private readonly ILogger<TagsController> _logger;
         private readonly LogHelper<object, ApiResponse<List<Tags>>> _logHelperList;
         private readonly LogHelper<int, ApiResponse<Tags>> _logHelperGet;
-        private readonly LogHelper<Tags, ApiResponse<Tags>> _logHelperTagObj;
+        private readonly LogHelper<TagRequestDto, ApiResponse<Tags>> _logHelperTagObj;
         private readonly LogHelper<int, ApiResponse<bool>> _logHelperBool;
 
         public TagsController(ITagsService service, ILogger<TagsController> logger)
@@ -25,7 +26,7 @@ namespace MeowCore.Controllers
             _logHelperList.CreateLogger(_logger);
             _logHelperGet = new LogHelper<int, ApiResponse<Tags>>();
             _logHelperGet.CreateLogger(_logger);
-            _logHelperTagObj = new LogHelper<Tags, ApiResponse<Tags>>();
+            _logHelperTagObj = new LogHelper<TagRequestDto, ApiResponse<Tags>>();
             _logHelperTagObj.CreateLogger(_logger);
             _logHelperBool = new LogHelper<int, ApiResponse<bool>>();
             _logHelperBool.CreateLogger(_logger);
@@ -88,7 +89,7 @@ namespace MeowCore.Controllers
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<Tags>), 201)]
         [ProducesResponseType(typeof(ApiResponse<Tags>), 400)]
-        public async Task<IActionResult> CreateTagAsync([FromBody] Tags tag)
+        public async Task<IActionResult> CreateTagAsync([FromBody] TagRequestDto tag)
         {
             var log = _logHelperTagObj.GetInitialLog(
                 nameof(TagsController),
@@ -119,7 +120,7 @@ namespace MeowCore.Controllers
         [ProducesResponseType(typeof(ApiResponse<Tags>), 200)]
         [ProducesResponseType(typeof(ApiResponse<Tags>), 400)]
         [ProducesResponseType(typeof(ApiResponse<Tags>), 404)]
-        public async Task<IActionResult> UpdateTagAsync(int id, [FromBody] Tags tag)
+        public async Task<IActionResult> UpdateTagAsync(int id, [FromBody] TagRequestDto tag)
         {
             var log = _logHelperTagObj.GetInitialLog(
                 nameof(TagsController),

@@ -1,7 +1,7 @@
 /**
  * Model for health status response.
  */
-export interface HealthStatusModel {
+export interface HealthStatusResponse {
   /**
    * Service status.
    */

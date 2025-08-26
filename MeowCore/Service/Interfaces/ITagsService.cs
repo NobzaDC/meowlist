@@ -1,6 +1,5 @@
 using MeowCore.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using MeowCore.Models.RequestDTOs;
 
 namespace MeowCore.Service.Interfaces
 {
@@ -8,8 +7,8 @@ namespace MeowCore.Service.Interfaces
     {
         Task<Tags?> GetTagsById(int id);
         Task<List<Tags>?> GetTagsAsync();
-        Task<Tags> CreateTagAsync(Tags tag);
-        Task<Tags?> UpdateTagAsync(int id, Tags tag);
+        Task<Tags> CreateTagAsync(TagRequestDto tag);
+        Task<Tags?> UpdateTagAsync(int id, TagRequestDto tag);
         Task<bool> DeleteTagAsync(int id);
     }
 }

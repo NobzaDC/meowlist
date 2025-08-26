@@ -1,5 +1,6 @@
 ﻿using MeowCore.Data.Interfaces;
 using MeowCore.Models;
+using MeowCore.Models.RequestDTOs;
 using MeowCore.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,20 @@ namespace MeowCore.Service
             _repository = repository;
         }
 
-        public async Task<Tags> CreateTagAsync(Tags tag)
+        public async Task<Tags> CreateTagAsync(TagRequestDto tag)
         {
             if (tag == null)
                 throw new ArgumentNullException(nameof(tag));
             if (string.IsNullOrWhiteSpace(tag.Name))
                 throw new ArgumentException("Tag name cannot be empty.");
 
-            return await _repository.CreateTagAsync(tag);
+            var tagsEntity = new Tags
+            {
+                Name = tag.Name,
+                Color = tag.Color
+            };
+
+            return await _repository.CreateTagAsync(tagsEntity);
         }
 
         public async Task<bool> DeleteTagAsync(int id)
@@ -47,7 +54,7 @@ namespace MeowCore.Service
             return await _repository.GetTagsById(id);
         }
 
-        public async Task<Tags?> UpdateTagAsync(int id, Tags tag)
+        public async Task<Tags?> UpdateTagAsync(int id, TagRequestDto tag)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid tag id.");
@@ -56,7 +63,13 @@ namespace MeowCore.Service
             if (string.IsNullOrWhiteSpace(tag.Name))
                 throw new ArgumentException("Tag name cannot be empty.");
 
-            return await _repository.UpdateTagAsync(id, tag);
+            var tagsEntity = new Tags
+            {
+                Name = tag.Name,
+                Color = tag.Color
+            };
+
+            return await _repository.UpdateTagAsync(id, tagsEntity);
         }
     }
 }

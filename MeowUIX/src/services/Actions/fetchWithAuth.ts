@@ -1,5 +1,4 @@
 import { type ApiResponse } from "../Interfaces/ApiResponse";
-import { useNavigate } from "react-router-dom";
 
 /**
  * Wrapper for fetch requests that checks for 401 and redirects to login.
@@ -9,13 +8,17 @@ export async function fetchWithAuth<T>(
   init?: RequestInit
 ): Promise<ApiResponse<T>> {
   try {
-    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+    const myHeaders = new Headers(init?.headers);
+    if (token) {
+      myHeaders.append("Authorization", `Bearer ${token}`);
+    } 
 
-    const response = await fetch(input, init);
-    const data = await response.json() as ApiResponse<T>;
-    if (data.code === 401 || response.status === 401) {
-      navigate("/");
+    const response = await fetch(input, { ...init, headers: myHeaders });
+    if (response.status === 401) {
+      window.location.href = "/";
     }
+    const data = await response.json() as ApiResponse<T>;
     return data;
   } catch (error) {
     return {

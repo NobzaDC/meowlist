@@ -4,6 +4,7 @@ using MeowCore.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MeowCore.Helpers.Interfaces;
+using MeowCore.Models.RequestDTOs;
 
 namespace MeowCore.Controllers
 {
@@ -16,7 +17,7 @@ namespace MeowCore.Controllers
         private readonly ILogger<UsersController> _logger;
         private readonly LogHelper<object, ApiResponse<List<Users>>> _logHelperList;
         private readonly LogHelper<int, ApiResponse<Users>> _logHelperGet;
-        private readonly LogHelper<Users, ApiResponse<Users>> _logHelperUser;
+        private readonly LogHelper<UserRequestDto, ApiResponse<Users>> _logHelperUser;
         private readonly LogHelper<object, ApiResponse<Users>> _logHelperPwd;
         private readonly LogHelper<int, ApiResponse<bool>> _logHelperBool;
         private readonly LogHelper<object, ApiResponse<object>> _logHelperLogin;
@@ -30,7 +31,7 @@ namespace MeowCore.Controllers
             _logHelperList.CreateLogger(_logger);
             _logHelperGet = new LogHelper<int, ApiResponse<Users>>();
             _logHelperGet.CreateLogger(_logger);
-            _logHelperUser = new LogHelper<Users, ApiResponse<Users>>();
+            _logHelperUser = new LogHelper<UserRequestDto, ApiResponse<Users>>();
             _logHelperUser.CreateLogger(_logger);
             _logHelperPwd = new LogHelper<object, ApiResponse<Users>>();
             _logHelperPwd.CreateLogger(_logger);
@@ -103,12 +104,11 @@ namespace MeowCore.Controllers
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<Users>), 201)]
         [ProducesResponseType(typeof(ApiResponse<Users>), 400)]
-        public async Task<IActionResult> CreateUserAsync([FromBody] Users user, [FromQuery] string password)
+        public async Task<IActionResult> CreateUserAsync([FromBody] UserRequestDto user, [FromQuery] string password)
         {
             // Do not log the password
-            var safeUser = user == null ? null : new Users
+            var safeUser = user == null ? null : new UserRequestDto
             {
-                Id = user.Id,
                 Name = user.Name,
                 Email = user.Email,
                 IsAdmin = user.IsAdmin
@@ -146,12 +146,11 @@ namespace MeowCore.Controllers
         [ProducesResponseType(typeof(ApiResponse<Users>), 200)]
         [ProducesResponseType(typeof(ApiResponse<Users>), 400)]
         [ProducesResponseType(typeof(ApiResponse<Users>), 404)]
-        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] Users user)
+        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UserRequestDto user)
         {
             // Do not log the password
-            var safeUser = user == null ? null : new Users
+            var safeUser = user == null ? null : new UserRequestDto
             {
-                Id = user.Id,
                 Name = user.Name,
                 Email = user.Email,
                 IsAdmin = user.IsAdmin

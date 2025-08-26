@@ -1,12 +1,12 @@
 import type { ApiResponse } from "../../Interfaces/ApiResponse";
-import type { AuthenticationModel } from "../../Interfaces/AuthenticationModel";
+import type { AuthenticationRequest } from "../../Interfaces/AuthenticationRequest";
 import type { JwtTokenResponse } from "../../Interfaces/JwtTokenResponse";
 
 /**
  * Login user and get JWT token response.
  */
 export async function loginUser(
-  credentials: AuthenticationModel
+  credentials: AuthenticationRequest
 ): Promise<ApiResponse<JwtTokenResponse>> {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");

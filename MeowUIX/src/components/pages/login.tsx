@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button"
 import {
@@ -18,12 +18,19 @@ function Login() {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    
+      localStorage.setItem("token", "");
+      localStorage.setItem("user_id", "");
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     const response = await loginUser({ email, password });
     if (response.code === 200 && response.value) {
       localStorage.setItem("token", response.value.access_token);
+      localStorage.setItem("user_id", response.value.user_id);
       navigate("/main");
     } else {
       setError(response.message || "Login failed");

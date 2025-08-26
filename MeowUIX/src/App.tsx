@@ -5,7 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import MainPage from './components/pages/mainpage.tsx';
 import ErrorPage from './components/pages/error.tsx';
 import NotFound from './components/pages/404.tsx';
-import { DataTableTodos } from './components/sections/todos-table.tsx';
+import DataTableTodos  from './components/sections/todos-table.tsx';
 
 
 function App() {

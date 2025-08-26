@@ -42,6 +42,7 @@ namespace MeowCore.Helpers
 
             return new JwtTokenResponse
             {
+                user_id = userId,
                 access_token = accessToken,
                 token_type = "Bearer",
                 expires_in = (int)(expireMinutes * 60)

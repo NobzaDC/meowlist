@@ -7,6 +7,10 @@
     public class JwtTokenResponse
     {
         /// <summary>
+        /// Id of the user doing the request
+        /// </summary>
+        public string user_id { get; set; } = string.Empty;
+        /// <summary>
         /// JWT access token string.
         /// </summary>
         public string access_token { get; set; } = string.Empty;

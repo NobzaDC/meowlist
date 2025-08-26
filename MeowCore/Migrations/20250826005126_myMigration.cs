@@ -7,7 +7,7 @@
 namespace MeowCore.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class myMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -78,7 +78,7 @@ namespace MeowCore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false, comment: "Pending = 0, InProgress = 1, Completed = 2, Archived = 3"),
                     ListId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -125,6 +125,28 @@ namespace MeowCore.Migrations
                     { 2, "FishLover", "fishlover@meowlist.pur", false, "Luna", "$2a$11$9MDPMI3a.VQCvB3AXqgrkuibpkJ4QRAmGdSzXiIAP5jgEE/QsU2Qm" },
                     { 3, "Purrington", "purrington@meowlist.pur", false, "Milo", "$2a$11$9MDPMI3a.VQCvB3AXqgrkuibpkJ4QRAmGdSzXiIAP5jgEE/QsU2Qm" },
                     { 4, "Softpaw", "softpaw@meowlist.pur", false, "Nala", "$2a$11$9MDPMI3a.VQCvB3AXqgrkuibpkJ4QRAmGdSzXiIAP5jgEE/QsU2Qm" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Lists",
+                columns: new[] { "Id", "Title", "UserId" },
+                values: new object[,]
+                {
+                    { 1, "Meowfault", 1 },
+                    { 2, "Meowfault", 2 },
+                    { 3, "Meowfault", 3 },
+                    { 4, "Meowfault", 4 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Todos",
+                columns: new[] { "Id", "Description", "ListId", "Status", "Title" },
+                values: new object[,]
+                {
+                    { 1, "All set and pawsitive for this ameowzing day! 😼", 1, 0, "Hello Catmin." },
+                    { 2, "All set and pawsitive for this ameowzing day! 😼", 2, 0, "Hello FishLover." },
+                    { 3, "All set and pawsitive for this ameowzing day! 😼", 3, 0, "Hello Purrington." },
+                    { 4, "All set and pawsitive for this ameowzing day! 😼", 4, 0, "Hello Softpaw." }
                 });
 
             migrationBuilder.CreateIndex(

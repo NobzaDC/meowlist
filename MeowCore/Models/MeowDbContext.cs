@@ -35,7 +35,12 @@ namespace MeowCore.Models
 
             modelBuilder.Entity<Todos>()
                 .Property(t => t.Status)
-                .HasConversion<string>();
+                .HasComment("Pending = 0, InProgress = 1, Completed = 2, Archived = 3");
+
+
+            modelBuilder.Entity<Todos>()
+                .Property(t => t.Status)
+                .HasConversion<int>();
 
             //Password Hash for Admin123!
             var adminPasswordHash = "$2a$11$ZI3qmhCXbEL7QNhx.TdTOOHiCHztLTQGx8zHev67CTwR9GD3VWzKm"; 
@@ -48,6 +53,20 @@ namespace MeowCore.Models
                 new Users { Id = 2, Email = "fishlover@meowlist.pur", Name = "Luna", DisplayName = "FishLover", IsAdmin = false, PasswordHash = generalDefaultPassword },
                 new Users { Id = 3, Email = "purrington@meowlist.pur", Name = "Milo", DisplayName = "Purrington", IsAdmin = false, PasswordHash = generalDefaultPassword },
                 new Users { Id = 4, Email = "softpaw@meowlist.pur", Name = "Nala", DisplayName = "Softpaw", IsAdmin = false, PasswordHash = generalDefaultPassword }
+            );
+
+            modelBuilder.Entity<Lists>().HasData(
+                new Lists { Id = 1, Title = "Meowfault", UserId = 1},
+                new Lists { Id = 2, Title = "Meowfault", UserId = 2},
+                new Lists { Id = 3, Title = "Meowfault", UserId = 3},
+                new Lists { Id = 4, Title = "Meowfault", UserId = 4}
+            );
+
+            modelBuilder.Entity<Todos>().HasData(
+                new Todos { Id = 1, Title = "Hello Catmin.", Description = "All set and pawsitive for this ameowzing day! 😼", ListId = 1, Status = 0 },
+                new Todos { Id = 2, Title = "Hello FishLover.", Description = "All set and pawsitive for this ameowzing day! 😼", ListId = 2, Status = 0 },
+                new Todos { Id = 3, Title = "Hello Purrington.", Description = "All set and pawsitive for this ameowzing day! 😼", ListId = 3, Status = 0 },
+                new Todos { Id = 4, Title = "Hello Softpaw.", Description = "All set and pawsitive for this ameowzing day! 😼", ListId = 4, Status = 0 }
             );
         }
     }

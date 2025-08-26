@@ -18,8 +18,18 @@ namespace MeowCore.Data
 
         public async Task<List<Todos>?> GetTodosAsync() => await _context.Todos.ToListAsync();
 
-        public async Task<Todos> CreateTodoAsync(Todos todo)
+        public async Task<Todos> CreateTodoAsync(Todos todo, int user_id)
         {
+            var userList = await _context.Lists
+                .FirstOrDefaultAsync(l => l.UserId == user_id);
+
+            if (userList == null)
+            {
+                throw new ArgumentException("User does not have a list.");
+            }
+
+            todo.ListId = userList.Id;
+
             await _context.AddAsync(todo);
             await _context.SaveChangesAsync();
             return todo;
@@ -91,6 +101,25 @@ namespace MeowCore.Data
             return await _context.TodoTags
                 .Where(tt => tt.TodoId == todoId)
                 .Select(tt => tt.Tag)
+                .ToListAsync();
+        }
+
+        public async Task<List<Todos>> GetTodosByUser(int userId)
+        {
+            var listIds = await _context.Lists
+                .Where(l => l.UserId == userId)
+                .Select(l => l.Id)
+                .ToListAsync();
+
+            return await _context.Todos
+                .Where(t => listIds.Contains(t.ListId))
+                .ToListAsync();
+        }
+
+        public async Task<List<Todos>> GetTodosByList(int listId)
+        {
+            return await _context.Todos
+                .Where(t => t.ListId == listId)
                 .ToListAsync();
         }
     }

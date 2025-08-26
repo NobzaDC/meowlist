@@ -2,6 +2,7 @@
 using MeowCore.Data.Interfaces;
 using MeowCore.Models;
 using MeowCore.Service.Interfaces;
+using MeowCore.Models.RequestDTOs;
 
 namespace MeowCore.Service
 {
@@ -30,16 +31,24 @@ namespace MeowCore.Service
             return users;
         }
 
-        public async Task<Users> CreateUserAsync(Users user, string password)
+        public async Task<Users> CreateUserAsync(UserRequestDto user, string password)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("Password cannot be empty.");
 
-            user.PasswordHash = MyBcrypt.HashPassword(password);
+            var userEntity = new Users()
+            {
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                Name = user.Name,
+                IsAdmin = user.IsAdmin,
+                PasswordHash = MyBcrypt.HashPassword(password)
+                
+            };
 
-            var createdUser = await _repository.CreateUserAsync(user);
+            var createdUser = await _repository.CreateUserAsync(userEntity);
             return RemovePassword(createdUser)!;
         }
 
@@ -77,14 +86,23 @@ namespace MeowCore.Service
             return RemovePassword(user);
         }
 
-        public async Task<Users?> UpdateUserAsync(int id, Users user)
+        public async Task<Users?> UpdateUserAsync(int id, UserRequestDto user)
         {
             if (id <= 0)
                 throw new ArgumentException("Invalid user id.");
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
-            var updatedUser = await _repository.UpdateUserAsync(id, user);
+            var userEntity = new Users()
+            {
+                Id = id,
+                DisplayName = user.DisplayName,
+                Name = user.Name,
+                Email = user.Email,
+                IsAdmin = user.IsAdmin,
+            };
+
+            var updatedUser = await _repository.UpdateUserAsync(id, userEntity);
             return RemovePassword(updatedUser);
         }
 

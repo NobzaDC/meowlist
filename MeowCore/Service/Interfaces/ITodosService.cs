@@ -1,6 +1,5 @@
 using MeowCore.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using MeowCore.Models.RequestDTOs;
 
 namespace MeowCore.Service.Interfaces
 {
@@ -8,12 +7,14 @@ namespace MeowCore.Service.Interfaces
     {
         Task<Todos?> GetTodosById(int id);
         Task<List<Todos>?> GetTodosAsync();
-        Task<Todos> CreateTodoAsync(Todos todo);
-        Task<Todos?> UpdateTodoAsync(int id, Todos todo);
+        Task<Todos> CreateTodoAsync(TodoRequestDto todo, int user_id);
+        Task<Todos?> UpdateTodoAsync(int id, TodoRequestDto todo);
         Task<bool> DeleteTodoAsync(int id);
         Task<Todos?> GetTodoWithTags(int todoId);
         Task AddTagToTodo(int todoId, int tagId);
         Task RemoveTagFromTodo(int todoId, int tagId);
         Task<List<Tags>> GetTagsForTodo(int todoId);
+        Task<List<Todos>> GetTodosByUser(int userId);
+        Task<List<Todos>> GetTodosByList(int listId);
     }
 }
